@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: inter-pix-bridge
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: node server/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: INTER_BASE
+        value: https://cdpj.partners.bancointer.com.br
+      # Os itens abaixo você vai preencher no painel do Render depois:
+      - key: API_KEY
+      - key: INTER_CLIENT_ID
+      - key: INTER_CLIENT_SECRET
+      - key: INTER_CERT_PFX_BASE64
+      - key: INTER_CERT_PASSPHRASE
+      - key: INTER_PIX_CHAVE
+      - key: INTER_PIX_QR_EXPIRA_SEG
+        value: "1800"
