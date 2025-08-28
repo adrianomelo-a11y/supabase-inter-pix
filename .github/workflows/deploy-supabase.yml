@@ -16,11 +16,24 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
 
-      - name: Deploy function inter-pix-create-charge
+      - name: Login (PAT) e verificação básica
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase --version
+          supabase login --token "$SUPABASE_ACCESS_TOKEN"
+          echo ">>> WHOAMI"
+          supabase whoami || true
+          echo ">>> LIST PROJECTS"
+          supabase projects list || true
+
+      - name: Deploy function inter-pix-create-charge (debug)
+        env:
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: |
+          set -e
+          echo ">>> Deploy para projeto: $SUPABASE_PROJECT_REF"
           supabase functions deploy inter-pix-create-charge \
-            --project-ref $SUPABASE_PROJECT_REF \
-            --no-verify-jwt
+            --project-ref "$SUPABASE_PROJECT_REF" \
+            --no-verify-jwt \
+            --debug
