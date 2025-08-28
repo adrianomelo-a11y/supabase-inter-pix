@@ -1,0 +1,26 @@
+name: Deploy Edge Functions (Supabase)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "supabase/functions/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+
+      - name: Deploy function inter-pix-create-charge
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          supabase functions deploy inter-pix-create-charge \
+            --project-ref $SUPABASE_PROJECT_REF \
+            --no-verify-jwt
